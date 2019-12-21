@@ -1,40 +1,97 @@
-from tkinter import *
-#using tkinter which use the concept of widgets
+import tkinter as tk                # python 3
+from tkinter import font  as tkfont # python 3
 
-#This the root widget(The Window)
-root = Tk()
-root.title("Flappy Bird")
-root.geometry("1280x720")
-root.resizable(False, False)
+class SampleApp(tk.Tk):
 
-#tkinter has 3 layout managers
-#pack:  horizontal and vertical boxes
-#grid: two dimensional grid
-#place: absolute positioning
+    def __init__(self, *args, **kwargs):
+        tk.Tk.__init__(self, *args, **kwargs)
 
-#function that handle button press
-def startGame():
-    print("Run Game")
+        self.title_font = tkfont.Font(family='Helvetica', size=18, weight="bold", slant="italic")
+        self.title("Flappy Bird")
+        self.geometry("1280x720")
+        self.resizable(False, False)
 
-def loadPic():
-    print("Load Pic")
+        # the container is where we'll stack a bunch of frames
+        # on top of each other, then the one we want visible
+        # will be raised above the others
+        container = tk.Frame(self)
+        container.pack(side="top", fill="both", expand=True)
+        container.grid_rowconfigure(0, weight=1)
+        container.grid_columnconfigure(0, weight=1)
 
-def exitGame():
-    print("Exit")
+        self.frames = {}
+        for F in (StartPage, PageOne, PageTwo):
+            page_name = F.__name__
+            frame = F(parent=container, controller=self)
+            self.frames[page_name] = frame
 
-windowWidth = 1280
-windowheight = 720
-ButtonWidth = 100 
-ButtonHight = 50
-#xpos get proper center consider the size of the button
-xpos = (windowWidth/2) - (ButtonWidth/2)
+            # put all of the pages in the same location;
+            # the one on the top of the stacking order
+            # will be the one that is visible.
+            frame.grid(row=0, column=0, sticky="nsew")
 
-startButton = Button(root, text = "Start Game", command=startGame)
-startButton.place(height=ButtonHight, width=ButtonWidth, x=xpos, y=300)
-loadButton = Button(root, text = "Load Picture", command=loadPic)
-loadButton.place(height=ButtonHight, width=ButtonWidth, x=xpos, y= 400)
-exitbutton= Button(root, text = "Exit",command=exitGame)
-exitbutton.place(height=ButtonHight, width=ButtonWidth, x=xpos, y= 500)
+        self.show_frame("StartPage")
 
- 
-root.mainloop()
+    def show_frame(self, page_name):
+        '''Show a frame for the given page name'''
+        frame = self.frames[page_name]
+        frame.tkraise()
+
+
+class StartPage(tk.Frame):
+
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        self.controller = controller
+        label = tk.Label(self, text="This is the start page", font=controller.title_font)
+        label.pack(side="top", fill="x", pady=10)
+
+                #create canvas
+        canvas1 = tk.Canvas(self, background = "#D2D2D2",
+                                            width = 1280, height =  720)
+        canvas1.pack(padx = 10, pady = 10)
+        #add quit button
+
+        windowWidth = 1280
+        windowheight = 720
+        ButtonWidth = 100 
+        ButtonHight = 50
+        #xpos get proper center consider the size of the button
+        xpos = (windowWidth/2) - (ButtonWidth/2)
+
+        startButton = tk.Button(self, text = "Start Game", command=lambda: controller.show_frame("PageOne"))
+        startButton.place(height=ButtonHight, width=ButtonWidth, x=xpos, y=300)
+        loadButton = tk.Button(self, text = "Load Picture", command=lambda: controller.show_frame("PageTwo"))
+        loadButton.place(height=ButtonHight, width=ButtonWidth, x=xpos, y= 400)
+        exitbutton= tk.Button(self, text = "Exit",command=lambda: controller.show_frame("PageTwo"))
+        exitbutton.place(height=ButtonHight, width=ButtonWidth, x=xpos, y= 500)
+
+
+
+class PageOne(tk.Frame):
+
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        self.controller = controller
+        label = tk.Label(self, text="This is page 1", font=controller.title_font)
+        label.pack(side="top", fill="x", pady=10)
+        button = tk.Button(self, text="Go to the start page",
+                           command=lambda: controller.show_frame("StartPage"))
+        button.pack()
+
+
+class PageTwo(tk.Frame):
+
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        self.controller = controller
+        label = tk.Label(self, text="This is page 2", font=controller.title_font)
+        label.pack(side="top", fill="x", pady=10)
+        button = tk.Button(self, text="Go to the start page",
+                           command=lambda: controller.show_frame("StartPage"))
+        button.pack()
+
+
+if __name__ == "__main__":
+    app = SampleApp()
+    app.mainloop()
