@@ -27,8 +27,21 @@ class main:
         print(w.current(), w.get())
         w.place(x= 900, y= 15)
 
-        self.greet_button = Button(master, text="Greet", command=self.greet)
+        #Input Buttons
+        self.greet_button = Button(master, text="Find Path", command=self.greet)
         self.greet_button.place(x= 800, y= 15)
+
+        self.startM = Button(master, text="Start Marker", command=self.greet)
+        self.startM.place(x= 300, y= 15)
+
+        self.endM = Button(master, text="End Marker", command=self.greet)
+        self.endM.place(x= 400, y= 15)
+
+        self.endM = Button(master, text="Draw", command=self.greet)
+        self.endM.place(x= 500, y= 15)
+
+        self.clearB = Button(master, text="Clear", command=self.greet)
+        self.clearB.place(x= 600, y= 15)
 
         self.close_button = Button(master, text="Close", command=master.quit)
         self.close_button.place(x= 1200, y= 15)
