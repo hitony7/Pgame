@@ -13,7 +13,7 @@ Which will show the shortest path between two points on a graph.
 ### What I'm using to create this project
 - VSCODE is my current choice of IDE 
 - Extensions: Git History, Git Lens, Python EXT
-- Running on Python 3.2.0 32-Bit
+- Running on Python 3.2.0 32-Bit On Windows 10
 
 
 
