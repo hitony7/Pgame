@@ -66,7 +66,7 @@ class main:
 
     def onHover(self,event):
         print("hover")
-        self.canvas1.itemconfig(event.widget.find_closest(event.x, event.y), fill="blue") # change color
+        self.canvas1.itemconfig(, fill="blue") # change color
 
 root = Tk()
 my_gui = main(root)
