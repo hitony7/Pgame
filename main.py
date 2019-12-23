@@ -1,4 +1,7 @@
-from tkinter import Tk, Label, Button, Canvas
+from tkinter import Tk, Label, Button, Canvas, StringVar
+from tkinter.ttk import Combobox
+
+
 class main:
     def __init__(self, master):
         self.master = master
@@ -13,13 +16,22 @@ class main:
         self.drawGrid(canvas1)
 
         self.label = Label(master, text="This is our first GUI!")
-        self.label.place(x= 100, y= 25)
+        self.label.place(x= 100, y= 15)
+
+        w = Combobox(master, values=[
+                                    "Dijkstra's algorithm", 
+                                    "A* algorithm",
+                                    "March",
+                                    "April"])
+        w.current(0)
+        print(w.current(), w.get())
+        w.place(x= 900, y= 15)
 
         self.greet_button = Button(master, text="Greet", command=self.greet)
-        self.greet_button.place(x= 200, y= 25)
+        self.greet_button.place(x= 800, y= 15)
 
         self.close_button = Button(master, text="Close", command=master.quit)
-        self.close_button.place(x= 300, y= 25)
+        self.close_button.place(x= 1200, y= 15)
 
 
     def greet(self):
@@ -30,10 +42,8 @@ class main:
         sqaSize = 20 
         for c in range(64):
             for r in range(36):
-                print(r,c)
                 #Create Rect Parameters are (X0,y0,X1,Y1) (X0,Y0) Is top Left Corner (X1,Y1) Is Bottom Right Corner 
                 Canvas.create_rectangle(c*sqaSize, r*sqaSize, (c+1)*sqaSize, (r+1)*sqaSize)
-              # Canvas.create_rectangle(r, c, r*sqaSize, c*sqaSize)
                 
 
 
