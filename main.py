@@ -1,7 +1,7 @@
 from tkinter import Tk, Label, Button, Canvas, StringVar
 from tkinter.ttk import Combobox
 
-
+a = [[0 for x in range(65)] for y in range(37)]
 class main:
     def __init__(self, master):
         self.master = master
@@ -10,10 +10,10 @@ class main:
         master.geometry("1280x820")
         master.resizable(False, False)
         
-        canvas1 = Canvas(master, background = "#D2D2D2",
+        self.canvas1 = Canvas(master, background = "#D2D2D2",
                                             width = 1280, height =  720)
-        canvas1.place(y = 50)
-        self.drawGrid(canvas1)
+        self.canvas1.place(y = 50)
+        self.drawGrid(self.canvas1)
 
         self.label = Label(master, text="This is our first GUI!")
         self.label.place(x= 100, y= 15)
@@ -51,14 +51,22 @@ class main:
         print("Greetings!")
 
     def drawGrid(self,Canvas):
-        #64 R x 90 C 7
+        #64 COl x  36 ROW
         sqaSize = 20 
         for c in range(64):
             for r in range(36):
                 #Create Rect Parameters are (X0,y0,X1,Y1) (X0,Y0) Is top Left Corner (X1,Y1) Is Bottom Right Corner 
-                Canvas.create_rectangle(c*sqaSize, r*sqaSize, (c+1)*sqaSize, (r+1)*sqaSize)
-                
+                Canvas.create_rectangle(c*sqaSize, r*sqaSize, (c+1)*sqaSize, (r+1)*sqaSize, tags="rec" + str(c) + "," + str(r)) 
+                Canvas.tag_bind("rec" + str(c) + "," + str(r), '<ButtonPress-1>', self.onObjectClick) 
+                Canvas.tag_bind("rec" + str(c) + "," + str(r), '<Enter>', self.onHover) 
 
+    def onObjectClick(self,event):                  
+        print('Got object click', event.x, event.y)
+        print(event.widget.find_closest(event.x, event.y))
+
+    def onHover(self,event):
+        print("hover")
+        self.canvas1.itemconfig(event.widget.find_closest(event.x, event.y), fill="blue") # change color
 
 root = Tk()
 my_gui = main(root)
