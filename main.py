@@ -36,6 +36,9 @@ class SampleApp(tk.Tk):
     def show_frame(self, page_name):
         '''Show a frame for the given page name'''
         frame = self.frames[page_name]
+        if page_name == PageOne:
+            print(20)
+            PageOne.gameLoop(self)
         frame.tkraise()
 
 
@@ -71,15 +74,30 @@ class StartPage(tk.Frame):
 
 class PageOne(tk.Frame):
     import game as game    #Import game class
+    import time
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
         label = tk.Label(self, text="This is page 1", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
-        canvas1 = game
+
+         #create canvas
+
+        
         button = tk.Button(self, text="Go to the start page",
                            command=lambda: controller.show_frame("StartPage"))
         button.pack()
+
+    def gameLoop(self):
+            import time
+          # update() # update all objects that need to be updated, e.g. position changes, physics, all that other stuff
+          # draw() #render things on screen
+            x =100
+            y =100
+            alien1  = game.create_oval(50,50,x,y)
+            time.sleep(10)
+            alien1  = game.create_oval(50,50,500,500)
+            time.sleep(10)
 
 class PageTwo(tk.Frame):
 

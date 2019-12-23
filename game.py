@@ -6,4 +6,5 @@ class game(tk.Canvas):
         self.width = 1280
         self.height =  720
         self.pack()
+
  
