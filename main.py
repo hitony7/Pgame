@@ -1,7 +1,7 @@
 from tkinter import Tk, Label, Button, Canvas, StringVar
 from tkinter.ttk import Combobox
 
-a = [[0 for x in range(65)] for y in range(37)]
+
 class main:
     def __init__(self, master):
         self.master = master
@@ -56,17 +56,25 @@ class main:
         for c in range(64):
             for r in range(36):
                 #Create Rect Parameters are (X0,y0,X1,Y1) (X0,Y0) Is top Left Corner (X1,Y1) Is Bottom Right Corner 
-                Canvas.create_rectangle(c*sqaSize, r*sqaSize, (c+1)*sqaSize, (r+1)*sqaSize, tags="rec" + str(c) + "," + str(r)) 
+                Canvas.create_rectangle(c*sqaSize, r*sqaSize, (c+1)*sqaSize, (r+1)*sqaSize, tags="rec" + str(c) + "," + str(r),  fill = "#D2D2D2") 
                 Canvas.tag_bind("rec" + str(c) + "," + str(r), '<ButtonPress-1>', self.onObjectClick) 
-                Canvas.tag_bind("rec" + str(c) + "," + str(r), '<Enter>', self.onHover) 
+                #Canvas.tag_bind("rec" + str(c) + "," + str(r), '<Enter>', self.onHover) 
 
     def onObjectClick(self,event):                  
         print('Got object click', event.x, event.y)
         print(event.widget.find_closest(event.x, event.y))
+        item = event.widget.find_closest(event.x, event.y)
+        tags = self.canvas1.gettags(item)
+        print(tags)
+        self.canvas1.itemconfig(event.widget.find_closest(event.x, event.y), fill="blue")# change color
 
     def onHover(self,event):
-        print("hover")
-        self.canvas1.itemconfig(, fill="blue") # change color
+        print(event.x, event.y)
+        print(event.widget.find_closest(event.x, event.x))
+        item = event.widget.find_closest(event.x, event.y)
+        tags = self.canvas1.gettags(item)
+        print(tags)
+        #self.canvas1.itemconfig(event.widget.find_closest(event.x, event.y), fill="blue") # change color
 
 root = Tk()
 my_gui = main(root)
