@@ -6,10 +6,13 @@ grids = [[0 for _ in range(36)] for _ in range(64)]
 class main:
     def __init__(self, master):
         self.master = master
+        #Default button booleans 
         self.startB = False
         self.endB   = False
-        self.wallB  = False 
-
+        self.wallB  = True #Drawing Walls default
+        #Null Value of Grid for no start and end markers
+        self.lastStartxy = (-1,-1) 
+        self.lastEndxy = (-1,-1)
         master.title("A simple GUI")
         master.geometry("1280x820")
         master.resizable(False, False)
@@ -54,6 +57,7 @@ class main:
     def greet(self):
         print("Greetings!")
 
+    #Change of Booleans when Button is Clicked
     def startMode(self):
         print("start")
         self.startB = True
@@ -93,22 +97,43 @@ class main:
         xy = self.stringSpliter(tag)
         x = int(xy[0])
         y = int(xy[1])
-        # change value of clicked object  
+        # change value of clicked object depending on what boolean button is true
         if(self.wallB):
-            self.canvas1.itemconfig(event.widget.find_closest(event.x, event.y), fill="Black")# change color4
+            self.canvas1.itemconfig(event.widget.find_closest(event.x, event.y), fill="Black")# change color 
             grids[x][y].wall = True
             grids[x][y].start = False
             grids[x][y].end  = False
         elif(self.startB):
-            self.canvas1.itemconfig(event.widget.find_closest(event.x, event.y), fill="Red")# change color4
+            #if Start Mark is placed the remove the last start marker
+            if(self.lastStartxy != (-1,-1)):        #No need to replace if no start marker
+                laststartx = self.lastStartxy[0]    #Get x from tuple
+                laststarty = self.lastStartxy[1]    #Get y from tuple
+                #Set previous startBlock to old color and reset booleans so square object is blank  
+                self.canvas1.itemconfig(event.widget.find_withtag("rec:" + str(laststartx) + "," + str(laststarty)), fill="#D2D2D2") 
+                grids[laststartx][laststarty].start = False
+                grids[laststartx][laststarty].wall = False
+                grids[laststartx][laststarty].end  = False
+            self.canvas1.itemconfig(event.widget.find_closest(event.x, event.y), fill="Red")# change color
             grids[x][y].start = True
             grids[x][y].wall = False
             grids[x][y].end  = False
+            self.lastStartxy = (x, y) 
+            print(self.lastStartxy)
         elif(self.endB):
-            self.canvas1.itemconfig(event.widget.find_closest(event.x, event.y), fill="Green")# change color4
+            #if end Mark is placed the remove the last end marker
+            if(self.lastEndxy != (-1,-1)):    #No need to replace if no end marker
+                lastendx = self.lastEndxy[0]
+                lastendy = self.lastEndxy[1]
+                #Set previous startBlock to old color and reset boolean so square object is blank  
+                self.canvas1.itemconfig(event.widget.find_withtag("rec:" + str(lastendx) + "," + str(lastendy)), fill="#D2D2D2")
+                grids[lastendx][lastendy].start = False
+                grids[lastendx][lastendy].wall = False
+                grids[lastendx][lastendy].end  = False
+            self.canvas1.itemconfig(event.widget.find_closest(event.x, event.y), fill="Green")# change color
             grids[x][y].end = True
             grids[x][y].start = False
             grids[x][y].wall  = False
+            self.lastEndxy = (x, y) 
 
         print(grids[x][y].toString())
     
@@ -120,11 +145,12 @@ class main:
 
 
     def onHover(self,event):
-        print(event.x, event.y)
-        print(event.widget.find_closest(event.x, event.x))
-        item = event.widget.find_closest(event.x, event.y)
-        tags = self.canvas1.gettags(item)
-        print(tags)
+       # print(event.x, event.y)
+       # print(event.widget.find_closest(event.x, event.x))
+       #item = event.widget.find_closest(event.x, event.y)
+      #  tags = self.canvas1.gettags(item)
+       # print(tags)
+       pass
         #self.canvas1.itemconfig(event.widget.find_closest(event.x, event.y), fill="blue") # change color
 
 root = Tk()
