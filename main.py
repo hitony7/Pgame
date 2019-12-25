@@ -99,11 +99,17 @@ class main:
         y = int(xy[1])
         # change value of clicked object depending on what boolean button is true
         if(self.wallB):
+            if(grids[x][y].start == True):
+                self.lastStartxy = (-1,-1) 
+            if(grids[x][y].end == True):
+                self.lastEndxy = (-1,-1) 
             self.canvas1.itemconfig(event.widget.find_closest(event.x, event.y), fill="Black")# change color 
             grids[x][y].wall = True
             grids[x][y].start = False
             grids[x][y].end  = False
         elif(self.startB):
+            if(grids[x][y].end == True):
+                self.lastEndxy = (-1,-1) 
             #if Start Mark is placed the remove the last start marker
             if(self.lastStartxy != (-1,-1)):        #No need to replace if no start marker
                 laststartx = self.lastStartxy[0]    #Get x from tuple
@@ -117,6 +123,8 @@ class main:
             self.lastStartxy = (x, y) 
             print(self.lastStartxy)
         elif(self.endB):
+            if(grids[x][y].start == True):
+                self.lastStartxy = (-1,-1) 
             #if end Mark is placed the remove the last end marker
             if(self.lastEndxy != (-1,-1)):    #No need to replace if no end marker
                 lastendx = self.lastEndxy[0]
