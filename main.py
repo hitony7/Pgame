@@ -71,14 +71,19 @@ class main:
         print(tag)
         self.canvas1.itemconfig(event.widget.find_closest(event.x, event.y), fill="blue")# change color4
         #get tag of clicked object
-        tupleF = tag[0]
-        a = tupleF.rsplit(":")
-        b = a[1].rsplit(",")
-        print(b)
-        #recx=a[4:5]
-        #recy=a[6:7]
-        #print("REC:"+ str(recx) + str(recy) )
+        xy = self.stringSpliter(tag)
+        x = int(xy[0])
+        y = int(xy[1])
         # change value of clicked object  
+        grids[x][y].wall = True
+        print(grids[x][y].toString())
+    
+    def stringSpliter(self,tag):
+        tupleF = tag[0]             #ELEMENT 0 is TAG OF REC, ELEMEMENT 1 is Current 
+        a = tupleF.rsplit(":")      #Split REC: part of tag 
+        b = a[1].rsplit(",")        #Split X(ROW), Y(COL)
+        return b                    #RETURN A LIST [X, Y]
+
 
     def onHover(self,event):
         print(event.x, event.y)
