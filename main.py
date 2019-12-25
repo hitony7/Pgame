@@ -3,6 +3,9 @@ from tkinter.ttk import Combobox
 from Sqaure import sqaure
 #36 ROWS and 64 COL
 grids = [[0 for _ in range(36)] for _ in range(64)]
+startB = False
+endB   = False
+wallB  = True 
 class main:
     def __init__(self, master):
         self.master = master
@@ -32,14 +35,14 @@ class main:
         self.greet_button = Button(master, text="Find Path", command=self.greet)
         self.greet_button.place(x= 800, y= 15)
 
-        self.startM = Button(master, text="Start Marker", command=self.greet)
+        self.startM = Button(master, text="Start Marker", command=self.startMode)
         self.startM.place(x= 300, y= 15)
 
-        self.endM = Button(master, text="End Marker", command=self.greet)
+        self.endM = Button(master, text="End Marker", command=self.endMode)
         self.endM.place(x= 400, y= 15)
 
-        self.endM = Button(master, text="Draw", command=self.greet)
-        self.endM.place(x= 500, y= 15)
+        self.drawM = Button(master, text="Draw", command=self.wallMode)
+        self.drawM.place(x= 500, y= 15)
 
         self.clearB = Button(master, text="Clear", command=self.greet)
         self.clearB.place(x= 600, y= 15)
@@ -50,6 +53,21 @@ class main:
 
     def greet(self):
         print("Greetings!")
+
+    def startMode(self):
+        startB = True
+        wallB = False
+        endB  = False
+
+    def endMode(self):
+        startB = True
+        wallB = False
+        endB  = True
+
+    def wallMode(self):
+        startB = False
+        wallB = True
+        endB  = False
 
     def drawGrid(self,Canvas):
         #64 COl x  36 ROW
@@ -69,7 +87,7 @@ class main:
         item = event.widget.find_closest(event.x, event.y)
         tag = self.canvas1.gettags(item)
         print(tag)
-        self.canvas1.itemconfig(event.widget.find_closest(event.x, event.y), fill="blue")# change color4
+        self.canvas1.itemconfig(event.widget.find_closest(event.x, event.y), fill="Black")# change color4
         #get tag of clicked object
         xy = self.stringSpliter(tag)
         x = int(xy[0])
