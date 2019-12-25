@@ -1,7 +1,8 @@
 from tkinter import Tk, Label, Button, Canvas, StringVar
 from tkinter.ttk import Combobox
-
-
+from Sqaure import sqaure
+#36 ROWS and 64 COL
+grids = [[0 for _ in range(36)] for _ in range(64)]
 class main:
     def __init__(self, master):
         self.master = master
@@ -57,8 +58,10 @@ class main:
             for r in range(36):
                 #Create Rect Parameters are (X0,y0,X1,Y1) (X0,Y0) Is top Left Corner (X1,Y1) Is Bottom Right Corner 
                 Canvas.create_rectangle(c*sqaSize, r*sqaSize, (c+1)*sqaSize, (r+1)*sqaSize, tags="rec" + str(c) + "," + str(r),  fill = "#D2D2D2") 
+                grids[c][r] = sqaure(c, r, wall = False, start = False, end = False)
+                print(grids[c][r].getxy(),c ,"," , r)
                 Canvas.tag_bind("rec" + str(c) + "," + str(r), '<ButtonPress-1>', self.onObjectClick) 
-                #Canvas.tag_bind("rec" + str(c) + "," + str(r), '<Enter>', self.onHover) 
+                Canvas.tag_bind("rec" + str(c) + "," + str(r), '<Enter>', self.onHover) 
 
     def onObjectClick(self,event):                  
         print('Got object click', event.x, event.y)
@@ -66,7 +69,10 @@ class main:
         item = event.widget.find_closest(event.x, event.y)
         tags = self.canvas1.gettags(item)
         print(tags)
-        self.canvas1.itemconfig(event.widget.find_closest(event.x, event.y), fill="blue")# change color
+        self.canvas1.itemconfig(event.widget.find_closest(event.x, event.y), fill="blue")# change color4
+        #set data struct 
+        #get tag of clicked object
+        # change value of clicked object  
 
     def onHover(self,event):
         print(event.x, event.y)
