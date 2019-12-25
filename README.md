@@ -22,9 +22,9 @@ Which will show the shortest path between two points on a graph.
 - [X] Get window set up
 - [X] Get Grid Showing
 - [X] Drawing obstacle walls 
-- [ ] Get markers showing
-    - [ ] Start Marker
-    - [ ] End Marker
+- [X] Get markers showing
+    - [X] Start Marker
+    - [X] End Marker
 - [ ] PathFinding
     - [ ] A*
     - [ ] Dijkstra's Algorithm
