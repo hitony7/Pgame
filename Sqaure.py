@@ -9,3 +9,5 @@ class sqaure:
     def getxy(self):
         return (self.x,self.y)
 
+    def toString(self):
+        return ("x=" + str(self.x) + "/y=" + str(self.y) + "/WALL=" + str(self.wall) +"/START=" + str(self.start) + "/END=" + str(self.end) )
