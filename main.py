@@ -3,12 +3,12 @@ from tkinter.ttk import Combobox
 from Sqaure import sqaure
 #36 ROWS and 64 COL
 grids = [[0 for _ in range(36)] for _ in range(64)]
-startB = False
-endB   = False
-wallB  = True 
 class main:
     def __init__(self, master):
         self.master = master
+        self.startB = False
+        self.endB   = False
+        self.wallB  = False 
 
         master.title("A simple GUI")
         master.geometry("1280x820")
@@ -55,19 +55,21 @@ class main:
         print("Greetings!")
 
     def startMode(self):
-        startB = True
-        wallB = False
-        endB  = False
+        print("start")
+        self.startB = True
+        self.wallB = False
+        self.endB  = False
 
     def endMode(self):
-        startB = True
-        wallB = False
-        endB  = True
+        print("END")
+        self.startB = False
+        self.wallB = False
+        self.endB  = True
 
     def wallMode(self):
-        startB = False
-        wallB = True
-        endB  = False
+        self.startB = False
+        self.wallB = True
+        self.endB  = False
 
     def drawGrid(self,Canvas):
         #64 COl x  36 ROW
@@ -87,13 +89,27 @@ class main:
         item = event.widget.find_closest(event.x, event.y)
         tag = self.canvas1.gettags(item)
         print(tag)
-        self.canvas1.itemconfig(event.widget.find_closest(event.x, event.y), fill="Black")# change color4
         #get tag of clicked object
         xy = self.stringSpliter(tag)
         x = int(xy[0])
         y = int(xy[1])
         # change value of clicked object  
-        grids[x][y].wall = True
+        if(self.wallB):
+            self.canvas1.itemconfig(event.widget.find_closest(event.x, event.y), fill="Black")# change color4
+            grids[x][y].wall = True
+            grids[x][y].start = False
+            grids[x][y].end  = False
+        elif(self.startB):
+            self.canvas1.itemconfig(event.widget.find_closest(event.x, event.y), fill="Red")# change color4
+            grids[x][y].start = True
+            grids[x][y].wall = False
+            grids[x][y].end  = False
+        elif(self.endB):
+            self.canvas1.itemconfig(event.widget.find_closest(event.x, event.y), fill="Green")# change color4
+            grids[x][y].end = True
+            grids[x][y].start = False
+            grids[x][y].wall  = False
+
         print(grids[x][y].toString())
     
     def stringSpliter(self,tag):
