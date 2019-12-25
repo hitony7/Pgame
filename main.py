@@ -110,9 +110,6 @@ class main:
                 laststarty = self.lastStartxy[1]    #Get y from tuple
                 #Set previous startBlock to old color and reset booleans so square object is blank  
                 self.canvas1.itemconfig(event.widget.find_withtag("rec:" + str(laststartx) + "," + str(laststarty)), fill="#D2D2D2") 
-                grids[laststartx][laststarty].start = False
-                grids[laststartx][laststarty].wall = False
-                grids[laststartx][laststarty].end  = False
             self.canvas1.itemconfig(event.widget.find_closest(event.x, event.y), fill="Red")# change color
             grids[x][y].start = True
             grids[x][y].wall = False
@@ -126,9 +123,7 @@ class main:
                 lastendy = self.lastEndxy[1]
                 #Set previous startBlock to old color and reset boolean so square object is blank  
                 self.canvas1.itemconfig(event.widget.find_withtag("rec:" + str(lastendx) + "," + str(lastendy)), fill="#D2D2D2")
-                grids[lastendx][lastendy].start = False
-                grids[lastendx][lastendy].wall = False
-                grids[lastendx][lastendy].end  = False
+                grids[lastendx][lastendy].resetB()
             self.canvas1.itemconfig(event.widget.find_closest(event.x, event.y), fill="Green")# change color
             grids[x][y].end = True
             grids[x][y].start = False

@@ -11,3 +11,8 @@ class sqaure:
 
     def toString(self):
         return ("x=" + str(self.x) + "/y=" + str(self.y) + "/WALL=" + str(self.wall) +"/START=" + str(self.start) + "/END=" + str(self.end) )
+
+    def resetB(self):
+        self.wall = False
+        self.start = False
+        self.end = False
