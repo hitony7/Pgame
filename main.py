@@ -13,6 +13,7 @@ class main:
         #Null Value of Grid for no start and end markers
         self.lastStartxy = (-1,-1) 
         self.lastEndxy = (-1,-1)
+        self.NotFound = True 
         master.title("A simple GUI")
         master.geometry("1280x820")
         master.resizable(False, False)
@@ -28,14 +29,14 @@ class main:
         w = Combobox(master, values=[
                                     "Dijkstra's algorithm", 
                                     "A* algorithm",
-                                    "March",
-                                    "April"])
+                                    "Depth First Search",
+                                    "Brepth First Search "])
         w.current(0)
         print(w.current(), w.get())
         w.place(x= 900, y= 15)
 
         #Input Buttons
-        self.greet_button = Button(master, text="Find Path", command=self.greet)
+        self.greet_button = Button(master, text="Find Path", command=self.pathFind)
         self.greet_button.place(x= 800, y= 15)
 
         self.startM = Button(master, text="Start Marker", command=self.startMode)
@@ -47,16 +48,119 @@ class main:
         self.drawM = Button(master, text="Draw", command=self.wallMode)
         self.drawM.place(x= 500, y= 15)
 
-        self.clearB = Button(master, text="Clear", command=self.greet)
+        self.clearB = Button(master, text="Clear")
         self.clearB.place(x= 600, y= 15)
 
         self.close_button = Button(master, text="Close", command=master.quit)
         self.close_button.place(x= 1200, y= 15)
 
 
-    def greet(self):
+    def pathFind(self):
         print("Greetings!")
+        #Make sure both Start and Mark are Placed
+        if(self.lastEndxy != (-1,-1) and self.lastEndxy != (-1,-1)): 
+            start = grids[self.lastStartxy[0]][self.lastStartxy[1]]
+            #self.DFS(start, grids)
+            #self.DFSV2(start, grids)
+            print(self.getneigh(start, grids))
+            a = self.getneigh(start, grids)
+            nodes_to_visit = [start]
+            nodes_to_visit.extend(a)
+            #print(self.getneigh(start=nodes_to_visit[-0],grids=grids))
+            #print(self.getneigh(start=nodes_to_visit[-1],grids=grids))
+            #print(self.getneigh(start=nodes_to_visit[-2],grids=grids))
+            #print(self.getneigh(start=nodes_to_visit[-3],grids=grids))
 
+            #while len(nodes_to_visit) <= 2304:
+            for n in range(2304):
+                print(str(n))
+                #print(self.getneigh(start= nodes_to_visit[n],grids=grids))
+                nodes_to_visit.extend(self.getneigh(start= nodes_to_visit[-n],grids=grids))
+            print(len(nodes_to_visit))  
+
+                  
+    
+    def DFSV2(self, start, grids):
+        nodes_to_visit = [start]
+        if(grids[start.x+1][start.y] is not nodes_to_visit):
+            nodes_to_visit.append(grids[start.x+1][start.y])
+            DFSV2(start= grids[start.x+1][start.y], grids = grids)
+        if(grids[start.x-1][start.y] is not nodes_to_visit):
+            nodes_to_visit.append(grids[start.x-1][start.y])
+        if(grids[start.x][start.y+1] is not nodes_to_visit):
+            nodes_to_visit.append(grids[start.x][start.y+1])
+        if(grids[start.x][start.y-1] is not nodes_to_visit):
+            nodes_to_visit.append(grids[start.x][start.y-1])
+        
+    
+        
+    def getneigh(self, start, grids):
+        a = []
+        if(self.vaild(sqaure=grids[start.x+1][start.y], x =start.x+1 ,y=start.y)):
+            a.append(grids[start.x+1][start.y])
+        if(self.vaild(sqaure=grids[start.x-1][start.y], x = start.x-1 , y=start.y)):
+            a.append(grids[start.x-1][start.y])
+        if(self.vaild(sqaure=grids[start.x][start.y+1], x= start.x, y=start.y +1)):
+            a.append(grids[start.x][start.y+1])
+        if(self.vaild(sqaure=grids[start.x][start.y-1], x= start.x , y=start.y-1)):
+            a.append(grids[start.x][start.y-1])
+        return a
+        
+
+
+
+    def DFS(self,start, grids):
+        print(start.toString())
+        #Check Vaild adjacency(LEFT,RIGHT,UP,DOWN) Vaild if it not a wall/outof bounds. then check if END
+        print(self.vaild(grids, start.x + 1 , start.y))           
+        if(self.vaild(grids, start.x + 1 , start.y)):
+            self.canvas1.itemconfig(self.canvas1.find_withtag("rec:" + str(start.x + 1) + "," + str(start.y)), fill="#90ee90")
+            if(grids[start.x + 1][start.y].end == True):
+                self.NotFound = False     
+            else:   
+                    if(grids[start.x+1][start.y].checked == False):
+                        grids[start.x+1][start.y].checked = True
+                        self.DFS(grids= grids,start= grids[start.x + 1][start.y])
+                        print(self.vaild(grids, start.x + 1 , start.y))           
+        if(self.vaild(grids, start.x - 1 , start.y)):
+            if(grids[start.x - 1][start.y].end == True):
+                self.NotFound = False     
+            else:
+                if(grids[start.x-1][start.y].checked == False):
+                    grids[start.x-1][start.y].checked = True
+                    self.DFS(grids= grids,start= grids[start.x - 1][start.y])
+                    print(self.vaild(grids, start.x - 1 , start.y))           
+        if(self.vaild(grids, start.x , start.y + 1)):
+            if(grids[start.x][start.y + 1].end == True):
+                self.NotFound = False     
+            else:
+                if(grids[start.x][start.y+1].checked == False):
+                    grids[start.x][start.y+1].checked = True
+                    self.DFS(grids= grids,start= grids[start.x][start.y+1])
+                    print(self.vaild(grids, start.x, start.y+1))           
+        if(self.vaild(grids, start.x , start.y -1)):
+            if(grids[start.x][start.y-1].end == True):
+                self.NotFound = False     
+            else:
+                if(grids[start.x][start.y-1].checked == False):
+                    grids[start.x][start.y-1].checked = True       
+                    self.DFS(grids= grids,start= grids[start.x][start.y -1])
+                    print(self.vaild(grids, start.x, start.y-1))      
+        
+
+
+    def vaild(self,sqaure, x, y):
+        print(str(x), str(y))
+        if (x >= 0 and x < 64 and y >= 0 and y < 36):
+            #print("Inbounds")
+            if(sqaure.wall == False and sqaure.checked == False):
+                #print("Not Wall")
+                return True
+            else:
+              return False
+        else:
+            return False
+        
     #Change of Booleans when Button is Clicked
     def startMode(self):
         print("start")
@@ -83,7 +187,7 @@ class main:
                 #Create Rect Parameters are (X0,y0,X1,Y1) (X0,Y0) Is top Left Corner (X1,Y1) Is Bottom Right Corner 
                 Canvas.create_rectangle(c*sqaSize, r*sqaSize, (c+1)*sqaSize, (r+1)*sqaSize, tags="rec:" + str(c) + "," + str(r),  fill = "#D2D2D2") 
                 grids[c][r] = sqaure(c, r, wall = False, start = False, end = False)
-                print(grids[c][r].getxy(),c ,"," , r)
+                # print(grids[c][r].getxy(),c ,"," , r)
                 Canvas.tag_bind("rec:" + str(c) + "," + str(r), '<ButtonPress-1>', self.onObjectClick) 
                 Canvas.tag_bind("rec:" + str(c) + "," + str(r), '<Enter>', self.onHover) 
 
@@ -116,7 +220,7 @@ class main:
                 laststarty = self.lastStartxy[1]    #Get y from tuple
                 #Set previous startBlock to old color and reset booleans so square object is blank  
                 self.canvas1.itemconfig(event.widget.find_withtag("rec:" + str(laststartx) + "," + str(laststarty)), fill="#D2D2D2") 
-            self.canvas1.itemconfig(event.widget.find_closest(event.x, event.y), fill="Red")# change color
+            self.canvas1.itemconfig(event.widget.find_closest(event.x, event.y), fill="Green")# change color
             grids[x][y].start = True
             grids[x][y].wall = False
             grids[x][y].end  = False
@@ -132,7 +236,7 @@ class main:
                 #Set previous startBlock to old color and reset boolean so square object is blank  
                 self.canvas1.itemconfig(event.widget.find_withtag("rec:" + str(lastendx) + "," + str(lastendy)), fill="#D2D2D2")
                 grids[lastendx][lastendy].resetB()
-            self.canvas1.itemconfig(event.widget.find_closest(event.x, event.y), fill="Green")# change color
+            self.canvas1.itemconfig(event.widget.find_closest(event.x, event.y), fill="Red")# change color
             grids[x][y].end = True
             grids[x][y].start = False
             grids[x][y].wall  = False

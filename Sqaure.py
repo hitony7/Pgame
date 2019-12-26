@@ -5,6 +5,7 @@ class sqaure:
         self.wall = wall
         self.start = start
         self.end = end
+        self.checked = False
 
     def getxy(self):
         return (self.x,self.y)
